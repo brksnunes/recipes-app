@@ -6,19 +6,19 @@ import { EMAIL_TEST, PASSWORD_TEST, TEST_ID_EMAIL_INPUT, TEST_ID_LOGIN_SUBMIT, T
 import renderWithRouter from '../helpers/renderWithRouter';
 
 describe(' Testing Login Page with components', () => {
-  // beforeEach(() => {
-  //   const localStorageMock = {
-  //     getItem: jest.fn(),
-  //     setItem: jest.fn(),
-  //     clear: jest.fn(),
-  //   };
+  beforeEach(() => {
+    const localStorageMock = {
+      getItem: jest.fn(),
+      setItem: jest.fn(),
+      clear: jest.fn(),
+    };
 
-  //   global.localStorage = localStorageMock;
+    global.localStorage = localStorageMock;
 
-  //   global.localStorage.setItem('user', '{email: teste@teste.com }');
-  //   global.localStorage.setItem('mealsToken', '1');
-  //   global.localStorage.setItem('drinksToken', '1');
-  // });
+    global.localStorage.setItem('user', '{email: teste@teste.com }');
+    global.localStorage.setItem('mealsToken', '1');
+    global.localStorage.setItem('drinksToken', '1');
+  });
   test('Page is Rendered', () => {
     renderWithRouter(<App />);
 
@@ -58,9 +58,12 @@ describe(' Testing Login Page with components', () => {
 
     expect(loginBtn).toBeEnabled();
     userEvent.click(loginBtn);
-    console.log('after', history);
 
+    const GetEmailFromLocalStorage = JSON.parse(global.localStorage.getItem('user'));
+    expect(GetEmailFromLocalStorage.email).toBe(EMAIL_TEST);
     // const { pathname } = history.location;
-    // expect(pathname).toBe('/meals');
+    // console.log(history);
+    // console.log(pathname);
+    // expect(pathname).toBe('/');
   });
 });
