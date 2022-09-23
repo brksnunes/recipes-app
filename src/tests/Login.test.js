@@ -6,19 +6,19 @@ import { EMAIL_TEST, PASSWORD_TEST, TEST_ID_EMAIL_INPUT, TEST_ID_LOGIN_SUBMIT, T
 import renderWithRouter from '../helpers/renderWithRouter';
 
 describe(' Testing Login Page with components', () => {
-  // beforeEach(() => {
-  //   const localStorageMock = {
-  //     getItem: jest.fn(),
-  //     setItem: jest.fn(),
-  //     clear: jest.fn(),
-  //   };
+  beforeEach(() => {
+    const localStorageMock = {
+      getItem: jest.fn(),
+      setItem: jest.fn(),
+      clear: jest.fn(),
+    };
 
-  //   global.localStorage = localStorageMock;
-
-  //   global.localStorage.setItem('user', '{email: teste@teste.com }');
-  //   global.localStorage.setItem('mealsToken', '1');
-  //   global.localStorage.setItem('drinksToken', '1');
-  // });
+    global.localStorage.clear();
+    global.localStorage = localStorageMock;
+    global.localStorage.setItem('user', '{email: teste@teste.com }');
+    global.localStorage.setItem('mealsToken', '1');
+    global.localStorage.setItem('drinksToken', '1');
+  });
   test('Page is Rendered', () => {
     renderWithRouter(<App />);
 
@@ -47,7 +47,7 @@ describe(' Testing Login Page with components', () => {
 
   test('if localStorage is working as expected', () => {
     const { history } = renderWithRouter(<App />);
-    console.log('before', history);
+    console.log('ANTES DE IR PARA MEALS', history);
 
     const emailInput = screen.getByTestId(TEST_ID_EMAIL_INPUT);
     const passwordInput = screen.getByTestId(TEST_ID_PASSWORD_INPUT);
@@ -58,9 +58,12 @@ describe(' Testing Login Page with components', () => {
 
     expect(loginBtn).toBeEnabled();
     userEvent.click(loginBtn);
-    console.log('after', history);
 
-    // const { pathname } = history.location;
-    // expect(pathname).toBe('/meals');
+    const GetEmailFromLocalStorage = JSON.parse(global.localStorage.getItem('user'));
+    expect(GetEmailFromLocalStorage.email).toBe(EMAIL_TEST);
+    screen.debug();
+
+    console.log('DEPOIS DE IR PARA MEALS', history);
+    expect(history.location.pathname).toBe('/meals');
   });
 });
