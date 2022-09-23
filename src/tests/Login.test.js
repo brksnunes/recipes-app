@@ -47,7 +47,7 @@ describe(' Testing Login Page with components', () => {
 
   test('if localStorage is working as expected', () => {
     const { history } = renderWithRouter(<App />);
-    console.log('before', history);
+    console.log('ANTES DE IR PARA MEALS', history);
 
     const emailInput = screen.getByTestId(TEST_ID_EMAIL_INPUT);
     const passwordInput = screen.getByTestId(TEST_ID_PASSWORD_INPUT);
@@ -61,9 +61,9 @@ describe(' Testing Login Page with components', () => {
 
     const GetEmailFromLocalStorage = JSON.parse(global.localStorage.getItem('user'));
     expect(GetEmailFromLocalStorage.email).toBe(EMAIL_TEST);
-    // const { pathname } = history.location;
-    // console.log(history);
-    // console.log(pathname);
-    // expect(pathname).toBe('/');
+    screen.debug();
+
+    console.log('DEPOIS DE IR PARA MEALS', history);
+    expect(history.location.pathname).toBe('/meals');
   });
 });
