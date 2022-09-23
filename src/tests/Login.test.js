@@ -13,8 +13,8 @@ describe(' Testing Login Page with components', () => {
       clear: jest.fn(),
     };
 
+    global.localStorage.clear();
     global.localStorage = localStorageMock;
-
     global.localStorage.setItem('user', '{email: teste@teste.com }');
     global.localStorage.setItem('mealsToken', '1');
     global.localStorage.setItem('drinksToken', '1');
