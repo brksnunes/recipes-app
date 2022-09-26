@@ -19,7 +19,7 @@ describe('Testing Footer Page with components', () => {
     });
 
     const { location: { pathname } } = history;
-    expect(pathname).toBe('/meals');
+    expect(pathname).toEqual('/meals');
 
     const mealsFooter = await screen.findByTestId(TEST_ID_FOOTER_MEALS);
     const drinkFooter = await screen.getByTestId(TEST_ID_FOOTER_DRINKS);
