@@ -22,7 +22,7 @@ describe('Testing Footer Page with components', () => {
     expect(pathname).toEqual('/meals');
 
     const mealsFooter = await screen.findByTestId(TEST_ID_FOOTER_MEALS);
-    const drinkFooter = await screen.getByTestId(TEST_ID_FOOTER_DRINKS);
+    const drinkFooter = await screen.findByTestId(TEST_ID_FOOTER_DRINKS);
 
     expect(mealsFooter).toBeInTheDocument();
     expect(drinkFooter).toBeInTheDocument();
