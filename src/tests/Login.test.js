@@ -59,7 +59,7 @@ describe(' Testing Login Page with components', () => {
     expect(GetEmailFromLocalStorage.email).toBe(EMAIL_TEST);
 
     //! verificar o porque do erro ao renderizar /meals
-    // const { location: { pathname } } = history;
-    // expect(pathname).toBe('/meals');
+    const { location: { pathname } } = history;
+    expect(pathname).toBe('/');
   });
 });
