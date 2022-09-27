@@ -2,21 +2,22 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
-// import Meals from '../pages/Meals';
 import renderWithRouter from '../helpers/renderWithRouter';
-import beefMeals from '../../cypress/mocks/beefMeals';
-import cocktailDrinks from '../../cypress/mocks/cocktailDrinks';
+import baseMeals from '../../cypress/mocks/meals';
+import baseDrinks from '../../cypress/mocks/drinks';
 import mealCategories from '../../cypress/mocks/mealCategories';
-import { TEST_ID_FOOTER_DRINKS, TEST_ID_FOOTER_MEALS } from '../helpers/constants';
+import chickenMeals from '../../cypress/mocks/chickenMeals';
+import cocktailDrinks from '../../cypress/mocks/cocktailDrinks';
+import drinkCategories from '../../cypress/mocks/drinkCategories';
+import { CHICKEN_CATEGORY_FILTER } from '../helpers/constants';
 
 describe('Testing Filter Page with components', () => {
-  test('Components exist in page', async () => {
+  test('Components Meals exist in page', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
       json: jest.fn().mockResolvedValueOnce(mealCategories),
-
     }).mockResolvedValueOnce({
-      json: jest.fn().mockResolvedValueOnce(beefMeals),
+      json: jest.fn().mockResolvedValueOnce(baseMeals),
     });
 
     const { history } = renderWithRouter(<App />, '/meals');
@@ -24,31 +25,119 @@ describe('Testing Filter Page with components', () => {
     const { location: { pathname } } = history;
     expect(pathname).toEqual('/meals');
 
-    const filterButton = await screen.findAllByRole('button');
-    expect(filterButton).toHaveLength(6);
+    const imgMeal = await screen.findByTestId('0-card-img');
+    expect(imgMeal).toBeInTheDocument();
+    const chickenFilter = await screen.findByTestId(CHICKEN_CATEGORY_FILTER);
+    expect(chickenFilter).toBeInTheDocument();
+  });
+
+  test('Components Drinks exist in page', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValueOnce(drinkCategories),
+    }).mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValueOnce(cocktailDrinks),
+    });
+
+    const { history } = renderWithRouter(<App />, '/drinks');
+
+    const { location: { pathname } } = history;
+    expect(pathname).toEqual('/drinks');
+
+    const CockTailFilter = await screen.findByTestId('Cocktail-category-filter');
+    expect(CockTailFilter).toBeInTheDocument();
 
     const imgMeal = await screen.findByTestId('0-card-img');
     expect(imgMeal).toBeInTheDocument();
   });
+  test('Filtering meals works as intended', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValueOnce(chickenMeals),
+    }).mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValueOnce(baseMeals),
+    }).mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValueOnce(mealCategories),
+    });
 
-  // test('page is changed to Drinks', async () => {
-  //   const { history } = renderWithRouter(<App />, '/meals');
-  //   let { location: { pathname } } = history;
-  //   expect(pathname).toEqual('/meals');
+    renderWithRouter(<App />, '/meals');
+    const chickenFilter = await screen.findByTestId(CHICKEN_CATEGORY_FILTER);
+    expect(chickenFilter).toBeInTheDocument();
 
-  //   const mealsFooter = await screen.findByTestId(TEST_ID_FOOTER_MEALS);
-  //   const drinkFooter = await screen.findByTestId(TEST_ID_FOOTER_DRINKS);
+    userEvent.click(chickenFilter);
 
-  //   expect(mealsFooter).toBeInTheDocument();
-  //   expect(drinkFooter).toBeInTheDocument();
+    const chickenCatch = await screen.findAllByRole('img');
+    expect(chickenCatch).toHaveLength(15);
 
-  //   userEvent.click(drinkFooter);
+    const getBrownStewChicken = await screen.findByAltText(/Brown Stew Chicken/i);
+    expect(getBrownStewChicken).toBeInTheDocument();
+  });
+  test('All Meals filtering works as intended', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValueOnce(baseMeals),
+    }).mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValueOnce(chickenMeals),
+    }).mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValueOnce(mealCategories),
+    });
 
-  //   global.fetch.mockResolvedValueOnce({
-  //     json: jest.fn().mockResolvedValueOnce(cocktailDrinks),
-  //   });
+    renderWithRouter(<App />, '/meals');
+    const getBrownStewChicken = await screen.findByAltText(/Brown Stew Chicken/i);
+    expect(getBrownStewChicken).toBeInTheDocument();
 
-  //   pathname = await history.location.pathname;
-  //   expect(pathname).toEqual('/');
-  // });
+    const allFilters = await screen.findByTestId(/All-category-filter/i);
+    expect(allFilters).toBeInTheDocument();
+
+    userEvent.click(allFilters);
+
+    const corbaMeal = await screen.findByAltText(/Corba/i);
+    expect(corbaMeal).toBeInTheDocument();
+  });
+
+  test('Filtering Drinks works as intended', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValueOnce(cocktailDrinks),
+    }).mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValueOnce(baseDrinks),
+    }).mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValueOnce(drinkCategories),
+    });
+
+    renderWithRouter(<App />, '/drinks');
+    const cocktailFilter = await screen.findByTestId('Cocktail-category-filter');
+    expect(cocktailFilter).toBeInTheDocument();
+
+    userEvent.click(cocktailFilter);
+
+    const cocktailCatch = await screen.findAllByRole('img');
+    expect(cocktailCatch).toHaveLength(15);
+
+    const getChevyDrink = await screen.findByAltText(/57 Chevy with a White License Plate/i);
+    expect(getChevyDrink).toBeInTheDocument();
+  });
+
+  test('All Drinks filtering works as intended', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValueOnce(baseDrinks),
+    }).mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValueOnce(cocktailDrinks),
+    }).mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValueOnce(drinkCategories),
+    });
+
+    renderWithRouter(<App />, '/drinks');
+    const getChevyDrink = await screen.findByAltText(/57 Chevy with a White License Plate/i);
+    expect(getChevyDrink).toBeInTheDocument();
+
+    const allFilters = await screen.findByTestId(/All-category-filter/i);
+    expect(allFilters).toBeInTheDocument();
+
+    userEvent.click(allFilters);
+
+    const GGDrink = await screen.findByAltText(/GG/i);
+    expect(GGDrink).toBeInTheDocument();
+  });
 });
