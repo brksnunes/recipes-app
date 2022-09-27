@@ -9,6 +9,8 @@ import mealCategories from '../../cypress/mocks/mealCategories';
 import chickenMeals from '../../cypress/mocks/chickenMeals';
 import cocktailDrinks from '../../cypress/mocks/cocktailDrinks';
 import drinkCategories from '../../cypress/mocks/drinkCategories';
+import oneMealMock from './OneMealMock';
+// import oneMeal from '../../cypress/mocks/oneMeal';
 import { CHICKEN_CATEGORY_FILTER } from '../helpers/constants';
 
 describe('Testing Filter Page with components', () => {
@@ -140,4 +142,36 @@ describe('Testing Filter Page with components', () => {
     const GGDrink = await screen.findByAltText(/GG/i);
     expect(GGDrink).toBeInTheDocument();
   });
+
+  test('when clicking in a Meal Recipe, redirect to new Details URL', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn()
+        .mockResolvedValueOnce(baseMeals)
+        .mockResolvedValueOnce(mealCategories)
+        .mockResolvedValue(oneMealMock),
+    });
+
+    const { history } = renderWithRouter(<App />, '/meals');
+    const getCorba = await screen.findByAltText(/Corba/i);
+    expect(getCorba).toBeInTheDocument();
+    userEvent.click(getCorba);
+    expect(history.location.pathname).toEqual('/meals/52977');
+    // expect(global.fetch).toBeCalledTimes(3);
+
+    // const checkPage = await screen.findByText(/Pick through your lentils for any/i);
+    // expect(checkPage).toBeInTheDocument();
+    // screen.debug();
+    // const { location: { pathname } } = history;
+    // console.log(pathname);
+  });
 });
+
+// jest.spyOn(global, 'fetch');
+// global.fetch.mockResolvedValueOnce({
+//   json: jest.fn().mockResolvedValueOnce(baseMeals),
+// }).mockResolvedValueOnce({
+//   json: jest.fn().mockResolvedValueOnce(mealCategories),
+// }).mockResolvedValue({
+//   json: jest.fn().mockResolvedValue(oneMealMock),
+// });
