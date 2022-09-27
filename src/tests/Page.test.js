@@ -1,21 +1,24 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-// import userEvent from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 import App from '../App';
 // import Meals from '../pages/Meals';
 import renderWithRouter from '../helpers/renderWithRouter';
 import beefMeals from '../../cypress/mocks/beefMeals';
-// import cocktailDrinks from '../../cypress/mocks/cocktailDrinks';
-// import { TEST_ID_FOOTER_DRINKS, TEST_ID_FOOTER_MEALS } from '../helpers/constants';
+import cocktailDrinks from '../../cypress/mocks/cocktailDrinks';
+import mealCategories from '../../cypress/mocks/mealCategories';
+import { TEST_ID_FOOTER_DRINKS, TEST_ID_FOOTER_MEALS } from '../helpers/constants';
 
 describe('Testing Filter Page with components', () => {
-  beforeEach(() => {
+  test('Components exist in page', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValueOnce(mealCategories),
+
+    }).mockResolvedValueOnce({
       json: jest.fn().mockResolvedValueOnce(beefMeals),
     });
-  });
-  test('Components exist in page', async () => {
+
     const { history } = renderWithRouter(<App />, '/meals');
 
     const { location: { pathname } } = history;
@@ -41,9 +44,8 @@ describe('Testing Filter Page with components', () => {
 
   //   userEvent.click(drinkFooter);
 
-  //   jest.spyOn(global, 'fetch');
-  //   global.fetch.mockResolvedValue({
-  //     json: jest.fn().mockResolvedValue(cocktailDrinks),
+  //   global.fetch.mockResolvedValueOnce({
+  //     json: jest.fn().mockResolvedValueOnce(cocktailDrinks),
   //   });
 
   //   pathname = await history.location.pathname;
