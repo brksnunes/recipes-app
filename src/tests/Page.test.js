@@ -158,13 +158,13 @@ describe('Testing Filter Page with components', () => {
     userEvent.click(getCorba);
     expect(history.location.pathname).toEqual('/meals/52977');
   });
-  test('when clicking in a Meal Recipe, redirect to new Details URL', async () => {
+  test('when clicking in a Drink Recipe, redirect to new Details URL', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
       json: jest.fn()
         .mockResolvedValueOnce(baseDrinks)
         .mockResolvedValueOnce(drinkCategories),
-        // .mockResolvedValue(oneDrink),
+      // .mockResolvedValue(oneDrink),
     });
 
     const { history } = renderWithRouter(<App />, '/drinks');
