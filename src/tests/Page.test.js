@@ -148,7 +148,6 @@ describe('Testing Filter Page with components', () => {
       json: jest.fn()
         .mockResolvedValueOnce(baseMeals)
         .mockResolvedValueOnce(mealCategories),
-      // .mockResolvedValueOnce(oneMeal),
     });
 
     const { history } = renderWithRouter(<App />, '/meals');
@@ -156,9 +155,6 @@ describe('Testing Filter Page with components', () => {
     expect(getCorba).toBeInTheDocument();
     userEvent.click(getCorba);
     expect(history.location.pathname).toEqual('/meals/52977');
-    // expect(global.fetch).toHaveBeenCalledTimes(3);
-    // const getCorba2 = await screen.findByAltText(/arrabiata/i);
-    // expect(getCorba2).toBeInTheDocument();
   });
   test('when clicking in a Drink Recipe, redirect to new Details URL', async () => {
     jest.spyOn(global, 'fetch');
@@ -166,7 +162,6 @@ describe('Testing Filter Page with components', () => {
       json: jest.fn()
         .mockResolvedValueOnce(baseDrinks)
         .mockResolvedValueOnce(drinkCategories),
-      // .mockResolvedValue(oneDrink),
     });
 
     const { history } = renderWithRouter(<App />, '/drinks');
@@ -174,7 +169,6 @@ describe('Testing Filter Page with components', () => {
     expect(getGG).toBeInTheDocument();
     userEvent.click(getGG);
     expect(history.location.pathname).toEqual('/drinks/15997');
-    // expect(global.fetch).toBeCalledTimes(3);
   });
 
   test('when clicking in a Drink Recipe, redirect to new Details URL', async () => {
