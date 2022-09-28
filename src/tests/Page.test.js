@@ -6,9 +6,9 @@ import renderWithRouter from '../helpers/renderWithRouter';
 import baseMeals from '../../cypress/mocks/meals';
 import baseDrinks from '../../cypress/mocks/drinks';
 import mealCategories from '../../cypress/mocks/mealCategories';
+import drinkCategories from '../../cypress/mocks/drinkCategories';
 import chickenMeals from '../../cypress/mocks/chickenMeals';
 import cocktailDrinks from '../../cypress/mocks/cocktailDrinks';
-import drinkCategories from '../../cypress/mocks/drinkCategories';
 import oneMealMock from './OneMealMock';
 import { CHICKEN_CATEGORY_FILTER } from '../helpers/constants';
 
