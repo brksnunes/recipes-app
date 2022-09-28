@@ -147,8 +147,8 @@ describe('Testing Filter Page with components', () => {
     global.fetch.mockResolvedValue({
       json: jest.fn()
         .mockResolvedValueOnce(baseMeals)
-        .mockResolvedValueOnce(mealCategories)
-        .mockResolvedValueOnce(oneMeal),
+        .mockResolvedValueOnce(mealCategories),
+      // .mockResolvedValueOnce(oneMeal),
     });
 
     const { history } = renderWithRouter(<App />, '/meals');
@@ -156,6 +156,9 @@ describe('Testing Filter Page with components', () => {
     expect(getCorba).toBeInTheDocument();
     userEvent.click(getCorba);
     expect(history.location.pathname).toEqual('/meals/52977');
+    // expect(global.fetch).toHaveBeenCalledTimes(3);
+    // const getCorba2 = await screen.findByAltText(/arrabiata/i);
+    // expect(getCorba2).toBeInTheDocument();
   });
   test('when clicking in a Drink Recipe, redirect to new Details URL', async () => {
     jest.spyOn(global, 'fetch');
@@ -172,5 +175,17 @@ describe('Testing Filter Page with components', () => {
     userEvent.click(getGG);
     expect(history.location.pathname).toEqual('/drinks/15997');
     // expect(global.fetch).toBeCalledTimes(3);
+  });
+
+  test('when clicking in a Drink Recipe, redirect to new Details URL', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn()
+        .mockResolvedValueOnce(oneMeal),
+    });
+
+    renderWithRouter(<App />, '/meals/52771');
+    const getGG = await screen.findByAltText(/Arrabiata/i);
+    expect(getGG).toBeInTheDocument();
   });
 });
