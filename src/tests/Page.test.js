@@ -9,8 +9,8 @@ import mealCategories from '../../cypress/mocks/mealCategories';
 import drinkCategories from '../../cypress/mocks/drinkCategories';
 import chickenMeals from '../../cypress/mocks/chickenMeals';
 import cocktailDrinks from '../../cypress/mocks/cocktailDrinks';
-import oneMealMock from './OneMealMock';
 import { CHICKEN_CATEGORY_FILTER } from '../helpers/constants';
+import oneMeal from '../../cypress/mocks/oneMeal';
 
 describe('Testing Filter Page with components', () => {
   test('Components Meals exist in page', async () => {
@@ -148,7 +148,7 @@ describe('Testing Filter Page with components', () => {
       json: jest.fn()
         .mockResolvedValueOnce(baseMeals)
         .mockResolvedValueOnce(mealCategories)
-        .mockResolvedValue(oneMealMock),
+        .mockResolvedValueOnce(oneMeal),
     });
 
     const { history } = renderWithRouter(<App />, '/meals');
