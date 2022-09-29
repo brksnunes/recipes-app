@@ -3,12 +3,11 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouter from '../helpers/renderWithRouter';
-import baseMeals from '../../cypress/mocks/meals';
-import mealCategories from '../../cypress/mocks/mealCategories';
 import oneMeal from '../../cypress/mocks/oneMeal';
 import oneDrink from '../../cypress/mocks/oneDrink';
+import { DETAILED_DRINK_PATH } from '../helpers/constants';
 
-describe('Testing Filter Page with components', () => {
+describe('Testing Recipe Details Page with Components', () => {
   beforeEach(() => {
     const localStorageMock = {
       getItem: jest.fn(),
@@ -19,12 +18,74 @@ describe('Testing Filter Page with components', () => {
     global.localStorage.clear();
     global.localStorage = localStorageMock;
   });
-  test('Components Meals Details is rendered', async () => {
+  test('Components Meal Details is rendered', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
       json: jest.fn().mockResolvedValue(oneMeal),
     });
     renderWithRouter(<App />, '/meals/52771');
     expect(global.fetch).toHaveBeenCalledTimes(1);
+  });
+  test('Components Drink Details is rendered', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(oneDrink),
+    });
+    renderWithRouter(<App />, DETAILED_DRINK_PATH);
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+  });
+
+  test('Components Drink is Shared', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(oneDrink),
+    });
+    navigator.clipboard = {
+      writeText: jest.fn(),
+    };
+    renderWithRouter(<App />, DETAILED_DRINK_PATH);
+    const getShareBtn = await screen.findByTestId('share-btn');
+    expect(getShareBtn).toBeInTheDocument();
+    userEvent.click(getShareBtn);
+    const linkCopiedText = await screen.findByText('Link copied!');
+    expect(linkCopiedText).toBeInTheDocument();
+  });
+
+  test('Components Drink is in progress', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(oneDrink),
+    });
+
+    global.localStorage.setItem('inProgressRecipes', JSON.stringify({
+      drinks: {
+        178319: ['Hpnotiq', 'Pineapple Juice', 'Banana Liqueur'],
+      },
+    }));
+
+    const { history } = renderWithRouter(<App />, '/drinks/178319');
+    const inProgressRecipe = await screen.findByTestId('start-recipe-btn');
+    expect(inProgressRecipe).toHaveTextContent('Continue Recipe');
+    userEvent.click(inProgressRecipe);
+    expect(history.location.pathname).toEqual('/drinks/178319/in-progress');
+  });
+  test('component is favorited', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(oneMeal),
+    });
+    renderWithRouter(<App />, '/meals/52771');
+    const favBtn = await screen.findByTestId('favorite-btn');
+    expect(favBtn.src).toBe('http://localhost/whiteHeartIcon.svg');
+
+    userEvent.click(favBtn);
+    const checkFavInLS = JSON.parse(global.localStorage.getItem('favoriteRecipes'));
+    expect(checkFavInLS[0].name).toBe('Spicy Arrabiata Penne');
+    expect(favBtn.src).toBe('http://localhost/blackHeartIcon.svg');
+
+    userEvent.click(favBtn);
+    const rmdFavInLS = JSON.parse(global.localStorage.getItem('favoriteRecipes'));
+    expect(rmdFavInLS).toHaveLength(0);
+    expect(favBtn.src).toBe('http://localhost/whiteHeartIcon.svg');
   });
 });
