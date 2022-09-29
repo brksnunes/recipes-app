@@ -5,7 +5,7 @@ import App from '../App';
 import renderWithRouter from '../helpers/renderWithRouter';
 import oneMeal from '../../cypress/mocks/oneMeal';
 import oneDrink from '../../cypress/mocks/oneDrink';
-import { DETAILED_DRINK_PATH } from '../helpers/constants';
+import { DETAILED_DRINK_PATH, WHITE_HEART, BLACK_HEART } from '../helpers/constants';
 
 describe('Testing Recipe Details Page with Components', () => {
   beforeEach(() => {
@@ -76,17 +76,17 @@ describe('Testing Recipe Details Page with Components', () => {
     });
     renderWithRouter(<App />, '/meals/52771');
     const favBtn = await screen.findByTestId('favorite-btn');
-    expect(favBtn.src).toBe('http://localhost/whiteHeartIcon.svg');
+    expect(favBtn.src).toBe(WHITE_HEART);
 
     userEvent.click(favBtn);
     const checkFavInLS = JSON.parse(global.localStorage.getItem('favoriteRecipes'));
     expect(checkFavInLS[0].name).toBe('Spicy Arrabiata Penne');
-    expect(favBtn.src).toBe('http://localhost/blackHeartIcon.svg');
+    expect(favBtn.src).toBe(BLACK_HEART);
 
     userEvent.click(favBtn);
     const rmdFavInLS = JSON.parse(global.localStorage.getItem('favoriteRecipes'));
     expect(rmdFavInLS).toHaveLength(0);
-    expect(favBtn.src).toBe('http://localhost/whiteHeartIcon.svg');
+    expect(favBtn.src).toBe(WHITE_HEART);
   });
 
   test('Components Drink is favorited', async () => {
@@ -109,10 +109,10 @@ describe('Testing Recipe Details Page with Components', () => {
     const favBtn = await screen.findByTestId('favorite-btn');
     const checkFavInLS = JSON.parse(global.localStorage.getItem('favoriteRecipes'));
     expect(checkFavInLS[0].name).toBe('Aquamarine');
-    expect(favBtn.src).toBe('http://localhost/blackHeartIcon.svg');
+    expect(favBtn.src).toBe(BLACK_HEART);
     userEvent.click(favBtn);
-    expect(favBtn.src).toBe('http://localhost/whiteHeartIcon.svg');
+    expect(favBtn.src).toBe(WHITE_HEART);
     userEvent.click(favBtn);
-    expect(favBtn.src).toBe('http://localhost/blackHeartIcon.svg');
+    expect(favBtn.src).toBe(BLACK_HEART);
   });
 });
