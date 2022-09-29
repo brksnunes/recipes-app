@@ -1,13 +1,13 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+// import userEvent from '@testing-library/user-event';
 import App from '../App';
 // import Meals from '../pages/Meals';
 import renderWithRouter from '../helpers/renderWithRouter';
 import beefMeals from '../../cypress/mocks/beefMeals';
-import cocktailDrinks from '../../cypress/mocks/cocktailDrinks';
+// import cocktailDrinks from '../../cypress/mocks/cocktailDrinks';
 import mealCategories from '../../cypress/mocks/mealCategories';
-import { TEST_ID_FOOTER_DRINKS, TEST_ID_FOOTER_MEALS } from '../helpers/constants';
+// import { TEST_ID_FOOTER_DRINKS, TEST_ID_FOOTER_MEALS } from '../helpers/constants';
 
 describe('Testing Filter Page with components', () => {
   test('Components exist in page', async () => {
