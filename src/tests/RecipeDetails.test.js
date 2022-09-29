@@ -4,31 +4,27 @@ import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouter from '../helpers/renderWithRouter';
 import baseMeals from '../../cypress/mocks/meals';
-import baseDrinks from '../../cypress/mocks/drinks';
 import mealCategories from '../../cypress/mocks/mealCategories';
-import drinkCategories from '../../cypress/mocks/drinkCategories';
-import chickenMeals from '../../cypress/mocks/chickenMeals';
-import cocktailDrinks from '../../cypress/mocks/cocktailDrinks';
-import { CHICKEN_CATEGORY_FILTER } from '../helpers/constants';
 import oneMeal from '../../cypress/mocks/oneMeal';
+import oneDrink from '../../cypress/mocks/oneDrink';
 
 describe('Testing Filter Page with components', () => {
-  test('Components Meals exist in page', async () => {
+  beforeEach(() => {
+    const localStorageMock = {
+      getItem: jest.fn(),
+      setItem: jest.fn(),
+      clear: jest.fn(),
+    };
+
+    global.localStorage.clear();
+    global.localStorage = localStorageMock;
+  });
+  test('Components Meals Details is rendered', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
-      json: jest.fn().mockResolvedValueOnce(mealCategories),
-    }).mockResolvedValueOnce({
-      json: jest.fn().mockResolvedValueOnce(baseMeals),
+      json: jest.fn().mockResolvedValue(oneMeal),
     });
-
-    const { history } = renderWithRouter(<App />, '/meals');
-
-    const { location: { pathname } } = history;
-    expect(pathname).toEqual('/meals');
-
-    const imgMeal = await screen.findByTestId('0-card-img');
-    expect(imgMeal).toBeInTheDocument();
-    const chickenFilter = await screen.findByTestId(CHICKEN_CATEGORY_FILTER);
-    expect(chickenFilter).toBeInTheDocument();
+    renderWithRouter(<App />, '/meals/52771');
+    expect(global.fetch).toHaveBeenCalledTimes(1);
   });
 });
