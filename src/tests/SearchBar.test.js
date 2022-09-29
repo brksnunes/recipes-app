@@ -235,7 +235,7 @@ describe('Tests for the SearchBar component', () => {
     expect(global.fetch).toHaveBeenCalledTimes(3);
   });
 
-  test.skip('if is possible to search Meal Letter Error', async () => {
+  test('if is possible to search Meal Letter Error', async () => {
     jest.spyOn(global, 'alert');
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
@@ -254,10 +254,14 @@ describe('Tests for the SearchBar component', () => {
 
     const searchInput = await screen.findByTestId(TEST_ID_SEARCHBAR_INPUT);
     userEvent.type(searchInput, 'AB');
+
+    const execSearchBtn = await screen.findByTestId(TEST_ID_SEARCHBAR_BTN);
+    userEvent.click(execSearchBtn);
+
     expect(global.alert).toHaveBeenCalled();
   });
 
-  test.skip('if is possible to search Drink Letter Error', async () => {
+  test('if is possible to search Drink Letter Error', async () => {
     jest.spyOn(global, 'alert');
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
@@ -276,35 +280,9 @@ describe('Tests for the SearchBar component', () => {
 
     const searchInput = await screen.findByTestId(TEST_ID_SEARCHBAR_INPUT);
     userEvent.type(searchInput, 'AB');
-    expect(global.alert).toHaveBeenCalled();
-  });
-
-  test.skip('if alert is showned if no results is found', async () => {
-    jest.spyOn(global, 'fetch');
-    global.fetch.mockResolvedValue({
-      json: jest.fn()
-        .mockResolvedValueOnce(baseMeals)
-        .mockResolvedValue(mealCategories)
-        .mockResolvedValue(emptyMeals),
-    });
-    jest.spyOn(global, 'alert');
-
-    renderWithRouter(<App />, '/drinks');
-    const searchBtn = await screen.findByTestId(TEST_ID_TOP_HEADER_SEARCH);
-    expect(searchBtn).toBeInTheDocument();
-    userEvent.click(searchBtn);
-    const headerBotton = await screen.findByTestId(TEST_ID_HEADER_BOTTON);
-    expect(headerBotton).toBeInTheDocument();
-
-    const searchInput = await screen.findByTestId(TEST_ID_SEARCHBAR_INPUT);
-    userEvent.type(searchInput, 'xablau');
-
-    const ingredientSearch = await screen.findByTestId(TEST_ID_SEARCHBAR_ING_FILTER);
-    userEvent.click(ingredientSearch);
 
     const execSearchBtn = await screen.findByTestId(TEST_ID_SEARCHBAR_BTN);
     userEvent.click(execSearchBtn);
-
-    expect(global.alert).toHaveTextContent('');
+    expect(global.alert).toHaveBeenCalled();
   });
 });
