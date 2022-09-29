@@ -69,7 +69,7 @@ describe('Testing Recipe Details Page with Components', () => {
     userEvent.click(inProgressRecipe);
     expect(history.location.pathname).toEqual('/drinks/178319/in-progress');
   });
-  test('component is favorited', async () => {
+  test('component Meal is favorited', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
       json: jest.fn().mockResolvedValue(oneMeal),
@@ -87,5 +87,32 @@ describe('Testing Recipe Details Page with Components', () => {
     const rmdFavInLS = JSON.parse(global.localStorage.getItem('favoriteRecipes'));
     expect(rmdFavInLS).toHaveLength(0);
     expect(favBtn.src).toBe('http://localhost/whiteHeartIcon.svg');
+  });
+
+  test('Components Drink is favorited', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(oneDrink),
+    });
+
+    global.localStorage.setItem('favoriteRecipes', JSON.stringify([{
+      id: '178319',
+      type: 'drink',
+      nationality: '',
+      category: 'Cocktail Alcoholic',
+      alcoholicOrNot: 'alcoholic-ou-non-alcoholic-ou-texto-vazio',
+      name: 'Aquamarine',
+      image: 'https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg',
+    }]));
+
+    renderWithRouter(<App />, '/drinks/178319');
+    const favBtn = await screen.findByTestId('favorite-btn');
+    const checkFavInLS = JSON.parse(global.localStorage.getItem('favoriteRecipes'));
+    expect(checkFavInLS[0].name).toBe('Aquamarine');
+    expect(favBtn.src).toBe('http://localhost/blackHeartIcon.svg');
+    userEvent.click(favBtn);
+    expect(favBtn.src).toBe('http://localhost/whiteHeartIcon.svg');
+    userEvent.click(favBtn);
+    expect(favBtn.src).toBe('http://localhost/blackHeartIcon.svg');
   });
 });
