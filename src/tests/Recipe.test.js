@@ -10,7 +10,7 @@ import drinkCategories from '../../cypress/mocks/drinkCategories';
 import chickenMeals from '../../cypress/mocks/chickenMeals';
 import cocktailDrinks from '../../cypress/mocks/cocktailDrinks';
 import { CHICKEN_CATEGORY_FILTER } from '../helpers/constants';
-import oneMeal from '../../cypress/mocks/oneMeal';
+// import oneMeal from '../../cypress/mocks/oneMeal';
 
 describe('Testing Filter Page with components', () => {
   test('Components Meals exist in page', async () => {
@@ -169,17 +169,5 @@ describe('Testing Filter Page with components', () => {
     expect(getGG).toBeInTheDocument();
     userEvent.click(getGG);
     expect(history.location.pathname).toEqual('/drinks/15997');
-  });
-
-  test('when clicking in a Drink Recipe, redirect to new Details URL', async () => {
-    jest.spyOn(global, 'fetch');
-    global.fetch.mockResolvedValue({
-      json: jest.fn()
-        .mockResolvedValueOnce(oneMeal),
-    });
-
-    renderWithRouter(<App />, '/meals/52771');
-    const getGG = await screen.findByAltText(/Arrabiata/i);
-    expect(getGG).toBeInTheDocument();
   });
 });
