@@ -9,7 +9,10 @@ import {
   HORIZONTAL_NAME_0,
   LINK_COPIED,
   FAVORITE_LINK,
-  HORIZONTAL_SHARE_1 } from '../helpers/constants';
+  FILTER_DRINK,
+  HORIZONTAL_SHARE_1,
+  FILTER_ALL,
+  FILTER_MEAL } from '../helpers/constants';
 
 describe('Testing Recipe Details Page with Components', () => {
   beforeEach(() => {
@@ -55,13 +58,13 @@ describe('Testing Recipe Details Page with Components', () => {
     ));
 
     renderWithRouter(<App />, FAVORITE_LINK);
-    const allButton = screen.getByTestId('filter-by-all-btn');
+    const allButton = screen.getByTestId(FILTER_ALL);
     expect(allButton).toBeInTheDocument();
 
-    const mealButton = screen.getByTestId('filter-by-meal-btn');
+    const mealButton = screen.getByTestId(FILTER_MEAL);
     expect(mealButton).toBeInTheDocument();
 
-    const drinkButton = screen.getByTestId('filter-by-drink-btn');
+    const drinkButton = screen.getByTestId(FILTER_DRINK);
     expect(drinkButton).toBeInTheDocument();
 
     const horizontalImage = screen.getByTestId('0-horizontal-image');
@@ -112,21 +115,21 @@ describe('Testing Recipe Details Page with Components', () => {
     const horizontalName1 = screen.getByTestId(HORIZONTAL_NAME_1);
     expect(horizontalName1).toBeInTheDocument();
 
-    const mealButton = screen.getByTestId('filter-by-meal-btn');
+    const mealButton = screen.getByTestId(FILTER_MEAL);
     expect(mealButton).toBeInTheDocument();
     userEvent.click(mealButton);
 
     expect(horizontalName1).not.toBeInTheDocument();
     expect(horizontalName).toBeInTheDocument();
 
-    const allButton = screen.getByTestId('filter-by-all-btn');
+    const allButton = screen.getByTestId(FILTER_ALL);
     userEvent.click(allButton);
 
     expect(horizontalName).toBeInTheDocument();
     const horizontalName2 = screen.getByTestId(HORIZONTAL_NAME_1);
     expect(horizontalName2).toBeInTheDocument();
 
-    const drinkButton = screen.getByTestId('filter-by-drink-btn');
+    const drinkButton = screen.getByTestId(FILTER_DRINK);
     userEvent.click(drinkButton);
   });
 
@@ -204,13 +207,13 @@ describe('Testing Recipe Details Page with Components', () => {
 
     renderWithRouter(<App />, FAVORITE_LINK);
 
-    const allButton = screen.getByTestId('filter-by-all-btn');
+    const allButton = screen.getByTestId(FILTER_ALL);
     expect(allButton).toBeInTheDocument();
 
-    const mealButton = screen.getByTestId('filter-by-meal-btn');
+    const mealButton = screen.getByTestId(FILTER_MEAL);
     expect(mealButton).toBeInTheDocument();
 
-    const drinkButton = screen.getByTestId('filter-by-drink-btn');
+    const drinkButton = screen.getByTestId(FILTER_DRINK);
     expect(drinkButton).toBeInTheDocument();
   });
 });
