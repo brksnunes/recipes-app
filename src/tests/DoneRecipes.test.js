@@ -188,6 +188,15 @@ describe('Testing Done Page with Components', () => {
     expect(linkCopiedText[0]).toBeInTheDocument();
   });
 
+  test('Components done Recipe is RENDERE when LOCAL STORAGE is Empty', () => {
+    renderWithRouter(<App />, DONE_RECIPES);
+    const mealButton = screen.getByTestId(TEST_FILTER_MEAL);
+    expect(mealButton).toBeInTheDocument();
+
+    const drinkButton = screen.getByTestId(TEST_FILTER_DRINK);
+    expect(drinkButton).toBeInTheDocument();
+  });
+
   test('Components Meal Details is rendered', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
