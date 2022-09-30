@@ -202,6 +202,10 @@ describe('Testing Done Page with Components', () => {
     global.fetch.mockResolvedValue({
       json: jest.fn().mockResolvedValue(oneMeal),
     });
+
+    global.localStorage.setItem('doneRecipes', JSON.stringify(
+      doneRecipes,
+    ));
     renderWithRouter(<App />, DETAILED_MEAL_PATH);
     expect(global.fetch).toHaveBeenCalledTimes(1);
     waitFor(() => {
