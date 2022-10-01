@@ -5,7 +5,7 @@ import App from '../App';
 import renderWithRouter from '../helpers/renderWithRouter';
 import oneMeal from '../../cypress/mocks/oneMeal';
 import oneDrink from '../../cypress/mocks/oneDrink';
-import { DETAILED_DRINK_PATH, WHITE_HEART, BLACK_HEART } from '../helpers/constants';
+import { DETAILED_DRINK_PATH, WHITE_HEART, BLACK_HEART, DETAILED_MEAL_PATH } from '../helpers/constants';
 
 describe('Testing Recipe Details Page with Components', () => {
   beforeEach(() => {
@@ -49,23 +49,6 @@ describe('Testing Recipe Details Page with Components', () => {
     userEvent.click(getShareBtn);
     const linkCopiedText = await screen.findByText('Link copied!');
     expect(linkCopiedText).toBeInTheDocument();
-  });
-
-  test('Components Drink is in progress', async () => {
-    jest.spyOn(global, 'fetch');
-    global.fetch.mockResolvedValue({
-      json: jest.fn().mockResolvedValue(oneDrink),
-    });
-
-    global.localStorage.setItem('inProgressRecipes', JSON.stringify({
-      drinks: {
-        178319: ['Hpnotiq', 'Pineapple Juice', 'Banana Liqueur'],
-      },
-    }));
-
-    renderWithRouter(<App />, '/drinks/178319/in-progress');
-    const inProgressRecipe = await screen.findByTestId('finish-recipe-btn');
-    expect(inProgressRecipe).toHaveTextContent('Finish Recipe');
   });
   test('component Meal is favorited', async () => {
     jest.spyOn(global, 'fetch');
@@ -128,5 +111,106 @@ describe('Testing Recipe Details Page with Components', () => {
     expect(checkBoxBtn).toBeChecked();
     userEvent.click(checkBoxBtn);
     expect(checkBoxBtn).not.toBeChecked();
+  });
+
+  test('Components Drink is clicked', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(oneDrink),
+    });
+    const { history } = renderWithRouter(<App />, `${DETAILED_DRINK_PATH}/in-progress`);
+    const checkBoxBtn0 = await screen.findByRole('checkbox', {
+      name: /Hpnotiq 2 oz/i,
+    });
+    expect(checkBoxBtn0).toBeInTheDocument();
+    userEvent.click(checkBoxBtn0);
+    expect(checkBoxBtn0).toBeChecked();
+
+    const checkBoxBtn1 = await screen.findByRole('checkbox', {
+      name: /Pineapple Juice 1 oz/i,
+    });
+    expect(checkBoxBtn1).toBeInTheDocument();
+    userEvent.click(checkBoxBtn1);
+    expect(checkBoxBtn1).toBeChecked();
+
+    const checkBoxBtn2 = await screen.findByRole('checkbox', {
+      name: /Banana Liqueur 1 oz/i,
+    });
+    expect(checkBoxBtn2).toBeInTheDocument();
+    userEvent.click(checkBoxBtn2);
+    expect(checkBoxBtn2).toBeChecked();
+
+    const doneClickBtn = await screen.findByTestId('finish-recipe-btn');
+    expect(doneClickBtn).toBeInTheDocument();
+    userEvent.click(doneClickBtn);
+    expect(history.location.pathname).toBe('/done-recipes');
+  });
+
+  test('Components Meal is clicked', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(oneMeal),
+    });
+    const { history } = renderWithRouter(<App />, `${DETAILED_MEAL_PATH}/in-progress`);
+    const checkBoxBtn0 = await screen.findByRole('checkbox', {
+      name: /penne rigate/i,
+    });
+    expect(checkBoxBtn0).toBeInTheDocument();
+    userEvent.click(checkBoxBtn0);
+    expect(checkBoxBtn0).toBeChecked();
+
+    const checkBoxBtn1 = await screen.findByRole('checkbox', {
+      name: /olive oil/i,
+    });
+    expect(checkBoxBtn1).toBeInTheDocument();
+    userEvent.click(checkBoxBtn1);
+    expect(checkBoxBtn1).toBeChecked();
+
+    const checkBoxBtn2 = await screen.findByRole('checkbox', {
+      name: /garlic 3 cloves/i,
+    });
+    expect(checkBoxBtn2).toBeInTheDocument();
+    userEvent.click(checkBoxBtn2);
+    expect(checkBoxBtn2).toBeChecked();
+
+    const checkBoxBtn3 = await screen.findByRole('checkbox', {
+      name: /chopped tomatoes 1 tin/i,
+    });
+    expect(checkBoxBtn3).toBeInTheDocument();
+    userEvent.click(checkBoxBtn3);
+    expect(checkBoxBtn3).toBeChecked();
+
+    const checkBoxBtn4 = await screen.findByRole('checkbox', {
+      name: /red chile flakes/i,
+    });
+    expect(checkBoxBtn4).toBeInTheDocument();
+    userEvent.click(checkBoxBtn4);
+    expect(checkBoxBtn4).toBeChecked();
+
+    const checkBoxBtn5 = await screen.findByRole('checkbox', {
+      name: /italian seasoning/i,
+    });
+    expect(checkBoxBtn5).toBeInTheDocument();
+    userEvent.click(checkBoxBtn5);
+    expect(checkBoxBtn5).toBeChecked();
+
+    const checkBoxBtn6 = await screen.findByRole('checkbox', {
+      name: /basil/i,
+    });
+    expect(checkBoxBtn6).toBeInTheDocument();
+    userEvent.click(checkBoxBtn6);
+    expect(checkBoxBtn6).toBeChecked();
+
+    const checkBoxBtn7 = await screen.findByRole('checkbox', {
+      name: /Parmigiano-Reggiano spinkling/i,
+    });
+    expect(checkBoxBtn7).toBeInTheDocument();
+    userEvent.click(checkBoxBtn7);
+    expect(checkBoxBtn7).toBeChecked();
+
+    const doneClickBtn = await screen.findByTestId('finish-recipe-btn');
+    expect(doneClickBtn).toBeInTheDocument();
+    userEvent.click(doneClickBtn);
+    expect(history.location.pathname).toBe('/done-recipes');
   });
 });
