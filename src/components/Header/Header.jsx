@@ -7,7 +7,7 @@ import profileIcon from '../../images/profileIcon.png';
 import capitalizeWords from '../../helpers/capitalizeWords';
 import SearchBar from '../SearchBar/SearchBar';
 import headerLogo from '../../images/header-logo.png';
-import Filter from '../Filter-compoments/Filter.component';
+// import Filter from '../Filter-compoments/Filter.component';
 
 function Header() {
   const [pageName, setPageName] = useState('');
@@ -16,11 +16,10 @@ function Header() {
 
   // TODO: verificar esse useEffect
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const { location: { pathname } } = history;
     setPageName(capitalizeWords(pathname));
-  });
+  }, [history]);
 
   // TODO: refatorar a verificação do nome da página atual feita abaixo
   return (

@@ -1,12 +1,8 @@
-/* eslint-disable max-lines */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
-import Toast from 'react-bootstrap/Toast';
-import ToastContainer from 'react-bootstrap/ToastContainer';
 import { useHistory, useParams, Link } from 'react-router-dom';
 import { getFromLocalStorage, saveLocalStorage } from '../../helpers/localStorage';
 import shareIcon from '../../images/shareIcon.png';
@@ -29,9 +25,6 @@ function CardInProgress({
     [idUrl]: {},
   });
   const [finish, setFinish] = useState(true);
-  const [showToast, setShowToast] = useState(false);
-  const [likeToast, setShowLikeToast] = useState(false);
-
   useEffect(() => {
     const startLSFavorites = getFromLocalStorage('favoriteRecipes') || [];
     setFavoriteRecipes(startLSFavorites);
@@ -119,12 +112,8 @@ function CardInProgress({
   const handleFavorite = () => {
     if (isFavorited) return removeIconFavorite();
     saveAndFavoriteRecipe();
-    setShowLikeToast(true);
   };
-  const copyToClipBoard = () => {
-    copy(`http://localhost:3000${pathname}`);
-    setShowToast(true);
-  };
+  const copyToClipBoard = () => { copy(`http://localhost:3000${pathname}`); };
   const saveDoneHandler = () => {
     const doneRecipes = getFromLocalStorage('doneRecipes') || [];
     const addRecipe = {
@@ -151,14 +140,10 @@ function CardInProgress({
         <Card.ImgOverlay className="image-overlay-details details-banner rounded-0">
           <Card.Body>
             <Card.Title className="display-6">Recipe in Progress</Card.Title>
-            <Card.Title
-              data-testid="recipe-title"
-            >
+            <Card.Title data-testid="recipe-title">
               {isMeal ? strMeal : strDrink }
             </Card.Title>
-            <Badge
-              bg="primary"
-            >
+            <Badge bg="primary">
               {isMeal ? strCategory : `${strCategory} | ${strAlcoholic}` }
             </Badge>
           </Card.Body>
@@ -180,34 +165,6 @@ function CardInProgress({
           alt="SHARE"
         />
       </div>
-
-      <ToastContainer className="p-3" position="top-end">
-        <Toast
-          onClose={ () => setShowToast(false) }
-          show={ showToast }
-          delay={ 3000 }
-          autohide
-        >
-          <Toast.Header>
-            <strong className="me-auto"> </strong>
-            <small>Just now</small>
-          </Toast.Header>
-          <Toast.Body>Link copied to your clipboard!</Toast.Body>
-        </Toast>
-        <Toast
-          onClose={ () => setShowLikeToast(false) }
-          show={ likeToast }
-          delay={ 3000 }
-          autohide
-        >
-          <Toast.Header>
-            <strong className="me-auto"> </strong>
-            <small>Just now</small>
-          </Toast.Header>
-          <Toast.Body>Recipe added to the favorites!</Toast.Body>
-        </Toast>
-      </ToastContainer>
-
       <Card>
         <Card.Body>
           <Card.Title className="mb-3 text-muted">Ingredients</Card.Title>
@@ -273,7 +230,6 @@ CardInProgress.defaultProps = {
   strArea: '',
   strTags: '',
 };
-
 CardInProgress.propTypes = {
   idMeal: PropTypes.string,
   idDrink: PropTypes.string,

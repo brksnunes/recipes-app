@@ -1,9 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
-// import Alert from 'react-bootstrap/Alert';
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 import { useHistory, useParams } from 'react-router-dom';
@@ -34,7 +32,6 @@ function CardDetails({
 }) {
   const { location: { pathname } } = useHistory();
   const { id: idUrl } = useParams();
-  // const [isCopied, setIsCopied] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
   const { ingredients, measures } = ingredientsAndRecipes;
   const isMeal = pathname.includes('meals');
@@ -46,7 +43,7 @@ function CardDetails({
     setFavoriteRecipes(startLSFavorites);
     const checkLSfavorites = startLSFavorites.some(({ id }) => id === idUrl);
     setIsFavorited(checkLSfavorites);
-  }, []);
+  }, [idUrl]);
   const renderMeasures = () => ingredients.map((val, index) => (
     <li
       key={ index }
@@ -102,7 +99,6 @@ function CardDetails({
   };
   const copyToClipBoard = () => {
     copy(`http://localhost:3000${pathname}`);
-    // setIsCopied(true);
     setShowToast(true);
   };
   const isDone = recipeIsDone('doneRecipes', idUrl);

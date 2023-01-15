@@ -44,7 +44,7 @@ function SearchBar() {
       }
     };
     redirectHandler();
-  }, [searchResults]);
+  }, [searchResults, history, setSearchresults]);
 
   const searchHandler = () => {
     if (history.location.pathname === MEALS_LINK) {

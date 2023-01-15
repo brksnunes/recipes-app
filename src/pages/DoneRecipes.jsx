@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-max-depth */
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
@@ -7,29 +6,14 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Header from '../components/Header/Header';
 import { getFromLocalStorage } from '../helpers/localStorage';
-// import shareIcon from '../images/shareIcon.svg';
 import '../styles/DoneRecipes.css';
-
-// const copy = require('clipboard-copy');
 
 function DoneRecipes() {
   const [doneRecipes, setDoneRecipes] = useState([]);
   const [filter, setFilter] = useState('all');
-  // const [isCopied, setIsCopied] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
-    // saveLocalStorage('doneRecipes', [{
-    //   id: '52771',
-    //   type: 'meal',
-    //   nationality: 'Italian',
-    //   category: 'Vegetarian',
-    //   alcoholicOrNot: '',
-    //   name: 'Spicy Arrabiata Penne',
-    //   image: 'https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg',
-    //   doneDate: '23/9/2020',
-    //   tags: ['naruto', 'kakashi'],
-    // }]);
     const doneRecipesFromLocalStorage = getFromLocalStorage('doneRecipes') || [];
     setDoneRecipes(doneRecipesFromLocalStorage);
   }, []);
@@ -37,11 +21,6 @@ function DoneRecipes() {
   const filterdoneRecipes = doneRecipes
     .filter(({ type }) => filter === 'all' || type === filter);
   console.log(filterdoneRecipes);
-
-  // const copyToClipBoard = ({ target: { dataset: { url } } }) => {
-  //   copy(`http://localhost:3000/${url}`);
-  //   setIsCopied(true);
-  // };
 
   return (
     <div>
@@ -99,27 +78,24 @@ function DoneRecipes() {
                 />
                 <Card.Body>
                   <Card.Title className="mt-4 text-muted">{ name }</Card.Title>
-                  <div className="done-card-body">
-
-                    <Badge bg="secondary">
-                      { type === 'meal'
-                        ? `${nationality} - ${category}`
-                        : alcoholicOrNot }
+                  <Badge bg="secondary" style={ { margin: '5px' } }>
+                    { type === 'meal'
+                      ? `${nationality} - ${category}`
+                      : alcoholicOrNot }
+                  </Badge>
+                  <Badge bg="secondary" style={ { margin: '5px' } }>
+                    { doneDate }
+                  </Badge>
+                  { tags?.filter((_, ind) => ind < 2).map((val, ind) => (
+                    <Badge
+                      bg="secondary"
+                      style={ { margin: '5px' } }
+                      key={ ind }
+                      data-testid={ `${index}-${val}-horizontal-tag` }
+                    >
+                      { val }
                     </Badge>
-                    <Badge bg="secondary">
-                      { doneDate }
-                    </Badge>
-                    { tags?.filter((_, ind) => ind < 2).map((val, ind) => (
-                      <Badge
-                        bg="secondary"
-                        key={ ind }
-                        data-testid={ `${index}-${val}-horizontal-tag` }
-                      >
-                        { val }
-                      </Badge>
-                    ))}
-
-                  </div>
+                  ))}
                 </Card.Body>
               </div>
             </Card>

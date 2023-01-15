@@ -12,6 +12,7 @@
 
 .done-card {
   display: flex;
+  gap: 5px;
 }
 
 .done-card img {

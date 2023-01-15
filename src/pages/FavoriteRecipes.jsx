@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-max-depth */
 import React, { useState, useEffect } from 'react';
 // import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -19,10 +18,8 @@ const copy = require('clipboard-copy');
 function FavoriteRecipes() {
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
   const [filter, setFilter] = useState([]);
-  // const [isCopied, setIsCopied] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [LikeToast, setShowLikeToast] = useState(false);
-  // const { location: { pathname } } = useHistory();
 
   useEffect(() => {
     const favoriteRecipesFromLocalStorage = getFromLocalStorage('favoriteRecipes') || [];
@@ -48,11 +45,6 @@ function FavoriteRecipes() {
     }
     setShowToast(true);
   };
-
-  // const saveAndFavoriteRecipe = (target) => {
-  //   saveLocalStorage('favoriteRecipes', saveFavoriteHandler(target));
-  //   setIsFavorited(true);
-  // };
 
   const handleFavorite = (target) => {
     console.log(target.name);
@@ -140,46 +132,44 @@ function FavoriteRecipes() {
           },
           index,
         ) => (
-          <div key={ `${index}` } className="done-recipe-card">
-            <Card>
-              <div className="done-card">
-                <Link to={ `/${type}s/${id}` }>
-                  <Card.Img
-                    variant="top"
-                    src={ image }
+          <Card className="done-card done-recipe-card" key={ `${index}` }>
+            <div className="done-card">
+              <Link to={ `/${type}s/${id}` }>
+                <Card.Img
+                  variant="top"
+                  src={ image }
+                />
+              </Link>
+              <Card.Body className="card-main-section">
+                <div className="done-card-header">
+                  <Card.Title className="text-muted">{ name }</Card.Title>
+                  <Badge bg="secondary">
+                    {type === 'meal' ? `${nationality} - ${category}` : alcoholicOrNot}
+                  </Badge>
+                </div>
+                <div className="social-container">
+                  <input
+                    type="image"
+                    alt="favorite"
+                    name={ type }
+                    id={ id }
+                    data-testid={ `${index}-horizontal-favorite-btn` }
+                    onClick={ ({ target }) => handleFavorite(target) }
+                    src={ blackHeartIcon }
                   />
-                </Link>
-                <Card.Body className="card-main-section">
-                  <div className="done-card-header">
-                    <Card.Title className="mt-4 text-muted">{ name }</Card.Title>
-                    <Badge bg="secondary">
-                      {type === 'meal' ? `${nationality} - ${category}` : alcoholicOrNot}
-                    </Badge>
-                  </div>
-                  <div className="social-container">
-                    <input
-                      type="image"
-                      alt="favorite"
-                      name={ type }
-                      id={ id }
-                      data-testid={ `${index}-horizontal-favorite-btn` }
-                      onClick={ ({ target }) => handleFavorite(target) }
-                      src={ blackHeartIcon }
-                    />
-                    <input
-                      type="image"
-                      src={ shareIcon }
-                      name={ type }
-                      id={ id }
-                      alt="share"
-                      onClick={ ({ target }) => copyToClipBoard(target) }
-                      data-testid={ `${index}-horizontal-share-btn` }
-                    />
-                  </div>
-                </Card.Body>
-              </div>
-            </Card>
-          </div>
+                  <input
+                    type="image"
+                    src={ shareIcon }
+                    name={ type }
+                    id={ id }
+                    alt="share"
+                    onClick={ ({ target }) => copyToClipBoard(target) }
+                    data-testid={ `${index}-horizontal-share-btn` }
+                  />
+                </div>
+              </Card.Body>
+            </div>
+          </Card>
         ))}
       </div>
 
